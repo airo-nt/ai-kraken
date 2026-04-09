@@ -1,0 +1,4 @@
+/symfony/.env.local
+/symfony/public/bundles/
+/symfony/var/
+/symfony/vendor/
