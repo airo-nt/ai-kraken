@@ -19,5 +19,15 @@ services:
     App\:
         resource: '../src/'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    App\Infrastructure\Client\Telegram\TelegramClient:
+        arguments:
+            $botBaseUri: '%env(TELEGRAM_BOT_BASE_URI)%'
+            $botToken: '%env(TELEGRAM_BOT_TOKEN)%'
+
+    App\Infrastructure\Client\Telegram\TelegramClientLogDecorator:
+        decorates: App\Infrastructure\Client\Telegram\TelegramClient
+        arguments:
+            $telegramClient: '@App\Infrastructure\Client\Telegram\TelegramClientLogDecorator.inner'
+
+    App\Infrastructure\Client\Telegram\TelegramClientInterface:
+        alias: App\Infrastructure\Client\Telegram\TelegramClientLogDecorator
