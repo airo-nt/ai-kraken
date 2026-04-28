@@ -29,5 +29,9 @@ services:
         arguments:
             $telegramClient: '@App\Infrastructure\Client\Telegram\TelegramClientLogDecorator.inner'
 
-    App\Infrastructure\Client\Telegram\TelegramClientInterface:
+    App\Application\Client\Telegram\TelegramClientInterface:
         alias: App\Infrastructure\Client\Telegram\TelegramClientLogDecorator
+
+    App\Application\Command\ProcessBotUpdateCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler'}
