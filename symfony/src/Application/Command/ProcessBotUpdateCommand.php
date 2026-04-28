@@ -8,7 +8,8 @@ final readonly class ProcessBotUpdateCommand
 {
     public function __construct(
         private int $chatId,
-        private string $text
+        private string $text,
+        private ?string $userName
     ) {}
 
     public function getChatId(): int
@@ -19,5 +20,10 @@ final readonly class ProcessBotUpdateCommand
     public function getText(): string
     {
         return $this->text;
+    }
+
+    public function getUserName(): ?string
+    {
+        return $this->userName;
     }
 }

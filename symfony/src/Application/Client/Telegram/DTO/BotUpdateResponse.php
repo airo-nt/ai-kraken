@@ -9,7 +9,8 @@ final readonly class BotUpdateResponse
     public function __construct(
         private int $updateId,
         private int $chatId,
-        private string $text
+        private string $text,
+        private ?string $userName
     ) {}
 
     public function getUpdateId(): int
@@ -25,5 +26,10 @@ final readonly class BotUpdateResponse
     public function getText(): string
     {
         return $this->text;
+    }
+
+    public function getUserName(): ?string
+    {
+        return $this->userName;
     }
 }

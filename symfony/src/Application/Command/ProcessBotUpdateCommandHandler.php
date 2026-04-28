@@ -19,7 +19,7 @@ final class ProcessBotUpdateCommandHandler
         $chatId = new ChatId($command->getChatId());
         $chat = $this->chatRepository->findByChatId($chatId);
         if (!$chat) {
-            $chat = new Chat($chatId);
+            $chat = new Chat($chatId, $command->getUserName());
             $this->chatRepository->save($chat);
         }
     }

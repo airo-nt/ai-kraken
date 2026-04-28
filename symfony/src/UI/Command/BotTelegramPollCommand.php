@@ -47,7 +47,8 @@ final class BotTelegramPollCommand extends Command
                         $this->bus->dispatch(
                             new ProcessBotUpdateCommand(
                                 $botUpdate->getChatId(),
-                                $botUpdate->getText()
+                                $botUpdate->getText(),
+                                $botUpdate->getUserName()
                             )
                         );
                         $lastUpdateId = $botUpdate->getUpdateId();

@@ -18,6 +18,9 @@ class ChatDoctrine
     #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $createdAt;
 
+    #[ORM\Column(type: 'string', length: 32, nullable: true)]
+    private ?string $userName;
+
     public function getChatId(): int
     {
         return $this->chatId;
@@ -37,6 +40,18 @@ class ChatDoctrine
     public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function getUserName(): ?string
+    {
+        return $this->userName;
+    }
+
+    public function setUserName(?string $userName): self
+    {
+        $this->userName = $userName;
+
         return $this;
     }
 }

@@ -48,7 +48,8 @@ final class TelegramClient implements TelegramClientInterface
                 $result[] = new BotUpdateResponse(
                     $item['update_id'],
                     $message['chat']['id'],
-                    $message['text']
+                    $message['text'],
+                    $message['chat']['username'] ?? null
                 );
             }
 

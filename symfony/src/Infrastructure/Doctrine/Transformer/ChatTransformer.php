@@ -14,6 +14,7 @@ final class ChatTransformer
     {
         return new Chat(
             new ChatId($chatDoctrine->getChatId()),
+            $chatDoctrine->getUserName(),
             $chatDoctrine->getCreatedAt()
         );
     }
@@ -22,6 +23,7 @@ final class ChatTransformer
     {
         return new ChatDoctrine()
             ->setChatId($chat->getChatId()->getValue())
-            ->setCreatedAt($chat->getCreatedAt());
+            ->setCreatedAt($chat->getCreatedAt())
+            ->setUserName($chat->getUserName());
     }
 }
