@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\UI\Command;
 
-use App\Infrastructure\Client\Telegram\Exception\TelegramClientException;
 use App\Infrastructure\Client\Telegram\TelegramClientInterface;
 use App\Infrastructure\Storage\BotTelegramLastUpdateIdStorage;
 use App\Infrastructure\Storage\Exception\CacheStorageException;
+use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,8 +37,15 @@ final class BotTelegramPollCommand extends Command
         while (true) {
             try {
                 $botUpdates = $this->telegramClient->getBotUpdates($lastUpdateId);
-            } catch (TelegramClientException) {
-                $output->writeln('<error>Failed communication with bot telegram.</error>');
+
+                if ($botUpdates->hasUpdates()) {
+                    foreach ($botUpdates as $botUpdate) {
+                        $lastUpdateId = $botUpdate->getUpdateId();
+                    }
+                    $this->storage->set($lastUpdateId);
+                }
+            } catch (Exception $e) {
+                $output->writeln('<error>' . $e->getMessage() . '</error>');
                 return Command::FAILURE;
             }
         }

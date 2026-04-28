@@ -12,4 +12,9 @@ final readonly class BotUpdatesResponse implements \IteratorAggregate
     {
         return new \ArrayIterator($this->botUpdates);
     }
+
+    public function hasUpdates(): bool
+    {
+        return count($this->botUpdates) > 0;
+    }
 }
