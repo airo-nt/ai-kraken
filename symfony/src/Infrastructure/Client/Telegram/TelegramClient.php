@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Client\Telegram;
 
-use App\Infrastructure\Client\Telegram\DTO\BotUpdateResponse;
-use App\Infrastructure\Client\Telegram\DTO\BotUpdatesResponse;
-use App\Infrastructure\Client\Telegram\Exception\TelegramClientException;
+use App\Application\Client\Telegram\DTO\BotUpdateResponse;
+use App\Application\Client\Telegram\DTO\BotUpdatesResponse;
+use App\Application\Client\Telegram\Exception\TelegramClientException;
+use App\Application\Client\Telegram\TelegramClientInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

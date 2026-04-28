@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Client\Telegram\DTO;
+namespace App\Application\Client\Telegram\DTO;
 
 final readonly class BotUpdateResponse
 {

@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Client\Telegram;
 
-use App\Infrastructure\Client\Telegram\DTO\BotUpdatesResponse;
-use App\Infrastructure\Client\Telegram\Exception\TelegramClientException;
+use App\Application\Client\Telegram\DTO\BotUpdatesResponse;
+use App\Application\Client\Telegram\Exception\TelegramClientException;
+use App\Application\Client\Telegram\TelegramClientInterface;
 use Psr\Log\LoggerInterface;
 
 final class TelegramClientLogDecorator implements TelegramClientInterface

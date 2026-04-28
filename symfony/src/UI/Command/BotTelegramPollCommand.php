@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI\Command;
 
-use App\Infrastructure\Client\Telegram\TelegramClientInterface;
+use App\Application\Client\Telegram\TelegramClientInterface;
 use App\Infrastructure\Storage\BotTelegramLastUpdateIdStorage;
 use App\Infrastructure\Storage\Exception\CacheStorageException;
 use Exception;
