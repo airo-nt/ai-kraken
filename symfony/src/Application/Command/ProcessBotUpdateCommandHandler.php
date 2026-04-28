@@ -17,10 +17,10 @@ final class ProcessBotUpdateCommandHandler
     public function __invoke(ProcessBotUpdateCommand $command): void
     {
         $chatId = new ChatId($command->getChatId());
-        $chat = $this->chatRepository->findByChatId($chatId);
-        if (!$chat) {
+        $isExistsChat = $this->chatRepository->isExistsByChatId($chatId);
+        if (!$isExistsChat) {
             $chat = new Chat($chatId, $command->getUserName());
-            $this->chatRepository->save($chat);
+            $this->chatRepository->create($chat);
         }
     }
 }

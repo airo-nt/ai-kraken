@@ -21,15 +21,18 @@ final class ChatDoctrineRepository extends ServiceEntityRepository implements Ch
         parent::__construct($registry, ChatDoctrine::class);
     }
 
-    public function findByChatId(ChatId $chatId): ?Chat
+    public function isExistsByChatId(ChatId $chatId): bool
     {
-        /* @var ChatDoctrine|null $chatDoctrine */
-        $chatDoctrine = $this->find($chatId->getValue());
-
-        return $chatDoctrine ? $this->transformer->toDomain($chatDoctrine) : null;
+        return $this->createQueryBuilder('c')
+                ->select('1')
+                ->where('c.chatId = :chatId')
+                ->setParameter('chatId', $chatId->getValue())
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult() !== null;
     }
 
-    public function save(Chat $chat): void
+    public function create(Chat $chat): void
     {
         $chatDoctrine = $this->transformer->toDoctrine($chat);
         $this->getEntityManager()->persist($chatDoctrine);

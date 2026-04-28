@@ -9,7 +9,7 @@ use App\Domain\Model\ValueObject\ChatId;
 
 interface ChatRepositoryInterface
 {
-    public function findByChatId(ChatId $chatId): ?Chat;
+    public function isExistsByChatId(ChatId $chatId): bool;
 
-    public function save(Chat $chat): void;
+    public function create(Chat $chat): void;
 }
