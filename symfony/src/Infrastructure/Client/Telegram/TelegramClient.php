@@ -65,16 +65,24 @@ final class TelegramClient implements TelegramClientInterface
     public function sendMessage(int $chatId, string $text): void
     {
         try {
-            $this->httpClient->request('POST', $this->botBaseUri . $this->botToken . '/sendMessage', [
+            $response = $this->httpClient->request('POST', $this->botBaseUri . $this->botToken . '/sendMessage', [
                 'json' => [
                     'chat_id' => $chatId,
                     'text' => $text,
                     'parse_mode' => 'HTML'
                 ]
             ]);
+
+            $content = $response->toArray();
+            $isSuccessResponse = $content['ok'] ?? false;
+            if (!$isSuccessResponse) {
+                throw new TelegramClientException(
+                    'Failed to send message by bot telegram'
+                );
+            }
         } catch (ExceptionInterface $e) {
             throw new TelegramClientException(
-                sprintf('Failed to send message bot telegram: %s', $e->getMessage()),
+                sprintf('Failed to send message by bot telegram: %s', $e->getMessage()),
                 previous: $e
             );
         }
