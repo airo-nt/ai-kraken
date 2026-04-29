@@ -32,7 +32,6 @@ final class ProcessBotUpdateCommandHandler
             return;
         }
 
-        $this->telegramClient->sendMessage($command->getChatId(), "Please wait, I'm generating a response for you...");
         $response = $this->aiClient->chatCompletion($command->getText());
         $this->telegramClient->sendMessage($command->getChatId(), $response->getAiMessage());
     }

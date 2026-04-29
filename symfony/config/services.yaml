@@ -23,14 +23,19 @@ services:
         arguments:
             $botBaseUri: '%env(TELEGRAM_BOT_BASE_URI)%'
             $botToken: '%env(TELEGRAM_BOT_TOKEN)%'
-
     App\Infrastructure\Client\Telegram\TelegramClientLogDecorator:
         decorates: App\Infrastructure\Client\Telegram\TelegramClient
         arguments:
             $telegramClient: '@App\Infrastructure\Client\Telegram\TelegramClientLogDecorator.inner'
-
     App\Application\Client\Telegram\TelegramClientInterface:
         alias: App\Infrastructure\Client\Telegram\TelegramClientLogDecorator
+
+    App\Infrastructure\Client\Ai\GithubAiClientLogDecorator:
+        decorates: App\Infrastructure\Client\Ai\GithubAiClient
+        arguments:
+            $inner: '@App\Infrastructure\Client\Ai\GithubAiClientLogDecorator.inner'
+    App\Application\Client\Ai\AiClientInterface:
+        alias: App\Infrastructure\Client\Ai\GithubAiClientLogDecorator
 
     App\Application\Command\ProcessBotUpdateCommandHandler:
         tags:
