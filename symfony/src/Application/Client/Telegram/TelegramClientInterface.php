@@ -13,4 +13,9 @@ interface TelegramClientInterface
      * @throws TelegramClientException
      */
     public function getBotUpdates(int $lastUpdateId): BotUpdatesResponse;
+
+    /**
+     * @throws TelegramClientException
+     */
+    public function sendMessage(int $chatId, string $text): void;
 }

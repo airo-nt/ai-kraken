@@ -29,4 +29,18 @@ final class TelegramClientLogDecorator implements TelegramClientInterface
             throw $e;
         }
     }
+
+    public function sendMessage(int $chatId, string $text): void
+    {
+        try {
+            $this->telegramClient->sendMessage($chatId, $text);
+        } catch (TelegramClientException $e) {
+            $this->logger->error('Telegram API call failed', [
+                'chat_id' => $chatId,
+                'error' => $e->getMessage()
+            ]);
+
+            throw $e;
+        }
+    }
 }
