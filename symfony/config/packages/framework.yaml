@@ -8,6 +8,13 @@ framework:
     #esi: true
     #fragments: true
 
+    http_client:
+        scoped_clients:
+            github_ai.http_client:
+                base_uri: '%env(GITHUB_MODELS_BASE_URI)%'
+                headers:
+                    Authorization: 'Bearer %env(GITHUB_MODELS_TOKEN)%'
+
 when@test:
     framework:
         test: true
