@@ -26,6 +26,7 @@ framework:
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
             'App\Application\Command\ProcessBotUpdateCommand': bot_updates_async
+            'App\Application\Query\*': sync
 
 # when@test:
 #    framework:

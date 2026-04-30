@@ -39,7 +39,11 @@ services:
 
     App\Application\Command\ProcessBotUpdateCommandHandler:
         tags:
-            - { name: 'messenger.message_handler'}
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
+
+    App\Application\Query\GetChatsQueryHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'query.bus' }
 
     App\Infrastructure\Bus\CommandBus:
         arguments:
