@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Bus;
 
 use App\Application\Bus\CommandBusInterface;
+use App\Application\Bus\Exception\CommandDispatchException;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -14,11 +15,12 @@ final class CommandBus implements CommandBusInterface
         private readonly MessageBusInterface $bus
     ) {}
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function dispatch(object $command): void
     {
-        $this->bus->dispatch($command);
+        try {
+            $this->bus->dispatch($command);
+        } catch (ExceptionInterface $e) {
+            throw CommandDispatchException::fromPrevious($e);
+        }
     }
 }
