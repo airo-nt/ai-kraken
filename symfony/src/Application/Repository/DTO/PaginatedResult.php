@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Application\Repository\DTO;
 
+use App\Application\Presentation\ArrayableInterface;
+
 /**
- * @template T
+ * @template T of ArrayableInterface
  */
 final readonly class PaginatedResult
 {
@@ -40,5 +42,15 @@ final readonly class PaginatedResult
     public function getTotal(): int
     {
         return $this->total;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'items' => array_map(fn(ArrayableInterface $item) => $item->toArray(), $this->getItems()),
+            'page' => $this->getPage(),
+            'limit' => $this->getLimit(),
+            'total' => $this->getTotal()
+        ];
     }
 }

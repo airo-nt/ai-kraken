@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Infrastructure\Doctrine\Repository;
 
 use App\Application\Repository\ChatReadRepositoryInterface;
-use App\Application\Repository\DTO\ChatItemDTO;
+use App\Application\Repository\DTO\ChatListItem;
 use App\Application\Repository\DTO\PaginatedResult;
 use App\Application\Repository\Exception\ReadRepositoryException;
 use Doctrine\DBAL\Connection;
@@ -44,7 +44,7 @@ final class ChatReadDoctrineRepository implements ChatReadRepositoryInterface
         }
 
         $items = array_map(
-            fn(array $row) => new ChatItemDTO(
+            fn(array $row) => new ChatListItem(
                 (int) $row['chat_id'],
                 $row['user_name'] ?: null,
                 $row['created_at']

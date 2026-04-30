@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Application\Repository\DTO;
 
-final readonly class ChatItemDTO
+use App\Application\Presentation\ArrayableInterface;
+
+final readonly class ChatListItem implements ArrayableInterface
 {
     public function __construct(
         private int $chatId,
@@ -25,5 +27,14 @@ final readonly class ChatItemDTO
     public function getCreatedAt(): string
     {
         return $this->createdAt;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'chat_id' => $this->getChatId(),
+            'user_name' => $this->getUserName(),
+            'created_at' => $this->getCreatedAt()
+        ];
     }
 }
