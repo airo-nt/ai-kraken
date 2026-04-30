@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI\Command;
 
+use App\Application\Bus\CommandBusInterface;
 use App\Application\Client\Telegram\DTO\BotUpdateResponse;
 use App\Application\Client\Telegram\TelegramClientInterface;
 use App\Application\Command\ProcessBotUpdateCommand;
@@ -13,7 +14,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsCommand(name: 'app:bot_telegram:poll')]
 final class BotTelegramPollCommand extends Command
@@ -21,7 +21,7 @@ final class BotTelegramPollCommand extends Command
     public function __construct(
         private readonly TelegramClientInterface $telegramClient,
         private readonly BotTelegramLastUpdateIdStorage $storage,
-        private readonly MessageBusInterface $bus
+        private readonly CommandBusInterface $commandBus
     ) {
         parent::__construct();
     }
@@ -44,7 +44,7 @@ final class BotTelegramPollCommand extends Command
                 if ($botUpdates->hasUpdates()) {
                     /* @var BotUpdateResponse $botUpdate */
                     foreach ($botUpdates as $botUpdate) {
-                        $this->bus->dispatch(
+                        $this->commandBus->dispatch(
                             new ProcessBotUpdateCommand(
                                 $botUpdate->getChatId(),
                                 $botUpdate->getText(),
