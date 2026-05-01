@@ -8,6 +8,7 @@ use App\Application\Client\Telegram\DTO\BotUpdateResponse;
 use App\Application\Client\Telegram\DTO\BotUpdatesResponse;
 use App\Application\Client\Telegram\Exception\TelegramClientException;
 use App\Application\Client\Telegram\TelegramClientInterface;
+use App\Infrastructure\Client\Telegram\DTO\BotTelegramResponseBody;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -34,16 +35,19 @@ final class TelegramClient implements TelegramClientInterface
                 ]
             );
 
-            $content = $response->toArray();
-            $isSuccessResponse = ($content['ok'] ?? false) && isset($content['result']);
-            if (!$isSuccessResponse) {
+            $body = new BotTelegramResponseBody($response->toArray(false));
+            if (!$body->isOk()) {
                 throw new TelegramClientException(
-                    'Failed to fetch updates from bot telegram: invalid content'
+                    sprintf(
+                        'Failed to fetch updates from bot telegram (%d): %s',
+                        $body->getErrorCode() ?? 0,
+                        $body->getDescription() ?? 'Unknown error'
+                    )
                 );
             }
 
             $result = [];
-            foreach ($content['result'] as $item) {
+            foreach ($body->getResult() as $item) {
                 $message = $item['message'];
                 $result[] = new BotUpdateResponse(
                     $item['update_id'],
@@ -68,16 +72,18 @@ final class TelegramClient implements TelegramClientInterface
             $response = $this->httpClient->request('POST', $this->botBaseUri . $this->botToken . '/sendMessage', [
                 'json' => [
                     'chat_id' => $chatId,
-                    'text' => $text,
-                    'parse_mode' => 'HTML'
+                    'text' => $text
                 ]
             ]);
 
-            $content = $response->toArray();
-            $isSuccessResponse = $content['ok'] ?? false;
-            if (!$isSuccessResponse) {
+            $body = new BotTelegramResponseBody($response->toArray(false));
+            if (!$body->isOk()) {
                 throw new TelegramClientException(
-                    'Failed to send message by bot telegram'
+                    sprintf(
+                        'Failed to send message by bot telegram (%d): %s',
+                        $body->getErrorCode() ?? 0,
+                        $body->getDescription() ?? 'Unknown error'
+                    )
                 );
             }
         } catch (ExceptionInterface $e) {
