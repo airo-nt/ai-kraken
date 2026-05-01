@@ -7,6 +7,7 @@ namespace App\Infrastructure\Client\Ai;
 use App\Application\Client\Ai\AiClientInterface;
 use App\Application\Client\Ai\DTO\ChatCompletionResponse;
 use App\Application\Client\Ai\Exception\AiClientException;
+use App\Infrastructure\Client\Ai\DTO\GithubAiResponseBody;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -35,13 +36,18 @@ final class GithubAiClient implements AiClientInterface
                 ]
             );
 
-            $content = $response->toArray();
-            $aiMessage = $content['choices'][0]['message']['content'] ?? null;
-            if ($aiMessage === null) {
-                throw new AiClientException('Null answer from github ai chat');
+            $body = new GithubAiResponseBody($response->toArray(false));
+            $responseCode = $response->getStatusCode();
+            if ($body->getMessage() === null) {
+                throw new AiClientException(
+                    sprintf('Failed get answer from github ai chat (%d): %s',
+                        $responseCode,
+                        $body->getErrorMessage() ?? 'Unknown error'
+                    )
+                );
             }
 
-            return new ChatCompletionResponse($aiMessage);
+            return new ChatCompletionResponse($body->getMessage());
         } catch (ExceptionInterface $e) {
             throw new AiClientException(
                 sprintf('Failed get answer from github ai chat: %s', $e->getMessage()),
