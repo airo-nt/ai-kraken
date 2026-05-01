@@ -6,6 +6,7 @@ namespace App\Infrastructure\EventListener;
 
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -23,7 +24,10 @@ final class ApiExceptionListener
 
         $exception = $event->getThrowable();
         if ($exception instanceof HandlerFailedException) {
-            $response = new JsonResponse(['error' => 'Something went wrong, please try later'], 500);
+            $response = new JsonResponse(
+                ['error' => 'Something went wrong, please try later'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
             $event->setResponse($response);
         }
     }

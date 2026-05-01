@@ -52,3 +52,7 @@ services:
     App\Infrastructure\Bus\QueryBus:
         arguments:
             $messageBus: '@query.bus'
+
+    App\Infrastructure\Security\ApiTokenAuthenticator:
+        arguments:
+            $apiToken: '%env(X_API_TOKEN)%'
