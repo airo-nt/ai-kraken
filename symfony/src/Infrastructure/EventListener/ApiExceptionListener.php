@@ -8,6 +8,7 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 
@@ -17,18 +18,22 @@ final class ApiExceptionListener
     public function __invoke(ExceptionEvent $event): void
     {
         $request = $event->getRequest();
-
         if (!str_starts_with($request->getPathInfo(), '/api/')) {
             return;
         }
 
         $exception = $event->getThrowable();
+        $error = $statusCode = null;
         if ($exception instanceof HandlerFailedException) {
-            $response = new JsonResponse(
-                ['error' => 'Something went wrong, please try later'],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-            $event->setResponse($response);
+            $error = 'Something went wrong, please try later';
+            $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+        } elseif ($exception instanceof NotFoundHttpException) {
+            $error = 'Endpoint not found';
+            $statusCode = Response::HTTP_NOT_FOUND;
+        }
+
+        if ($error && $statusCode) {
+            $event->setResponse(new JsonResponse(['error' => $error], $statusCode));
         }
     }
 }
