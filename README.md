@@ -73,7 +73,7 @@ docker exec -it ai-kraken-php php bin/console app:bot_telegram:poll
 ### 2. Асинхронная обработка сообщений
 
 ```bash
-docker exec -e APP_DEBUG=0 ai-kraken-php php bin/console messenger:consume bot_updates_async
+docker exec -e APP_DEBUG=0 -it ai-kraken-php php bin/console messenger:consume bot_updates_async
 ```
 
 Количество воркеров можно масштабировать в зависимости от нагрузки
@@ -81,7 +81,7 @@ docker exec -e APP_DEBUG=0 ai-kraken-php php bin/console messenger:consume bot_u
 ### 3. Обработка упавших сообщений
 
 ```bash
-docker exec -e APP_DEBUG=0 ai-kraken-php php bin/console messenger:consume failed
+docker exec -e APP_DEBUG=0 -it ai-kraken-php php bin/console messenger:consume failed
 ```
 
 ---
