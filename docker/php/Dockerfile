@@ -9,7 +9,8 @@ RUN apk add --no-cache \
     curl \
     autoconf \
     make \
-    g++
+    g++ \
+    linux-headers
 
 RUN docker-php-ext-install pdo_pgsql pgsql intl
 
